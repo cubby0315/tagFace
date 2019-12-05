@@ -72,7 +72,7 @@ def startRect(event):
 	global canvas, rectid, rectx0, recty0, rectx1, recty1
 	# Translate mouse screen coordinates to canvas coordinates
 	rectx0 = canvas.canvasx(event.x)
-	recty0 = canVans.canvasy(event.y)
+	recty0 = canvas.canvasy(event.y)
 	# Create a rectangle object on the canvas
 	rectid = canvas.create_rectangle(rectx0, recty0, rectx0, recty0, fill="", outline="#39FF14", width=3)
 
@@ -110,7 +110,7 @@ def stopRect(event):
 	# Update coordinates
 	canvas.coords(rectid, rectx0, recty0, rectx1, recty1)
 	# Store the rectangle id to the array
-	allFaceRect.append(rectx0)
+	allFaceRect.append(rectid)
 
 def clickUndo():
 	# Delete the latest rectangle
@@ -130,7 +130,7 @@ def clickOutput():
 	global canvas, allFaceRect, allOutputPath, allImagePath, image_width, image_height, resize_ratio
 	outputPath = allOutputPath.pop(0)
 	# If there's no face in the picture, file name will end as "_face0.txt"
-	if(len(allFaceRect) == 666):
+	if(len(allFaceRect) == 0):
 		outputFile = open(outputPath+"0.txt", "w")
 	else:
 		outputFile = open(outputPath+".txt", "w")
@@ -206,15 +206,15 @@ def initialCanvas(imagePath):
 	# Create "Undo" button
 	button0 = Button(text = "Undo", anchor=CENTER, bd=2, command=clickUndo)
 	button0.configure(activebackground="#33B5E5", relief=SUNKEN)
-	button0_window = canvas.create_window(10, 10, anchor=NW, window=button0)
+	canvas.create_window(10, 10, anchor=NW, window=button0)
 	# Create "Clear" button
-	button1 = Button(text = "Undo", anchor=CENTER, bd=2)
+	button1 = Button(text = "Clear", anchor=CENTER, bd=2)
 	button1.configure(activebackground="#33B5E5", relief=SUNKEN, command=clickClear)
-	button1_window = canvas.create_window(65, 10, anchor=NW, window=button1)
+	canvas.create_window(65, 10, anchor=NW, window=button1)
 	# Create "Ouput Coordinate" button
 	button2 = Button(text = "Ouput Coordinate", anchor=CENTER, bd=2, command=clickOutput)
 	button2.configure(activebackground="#33B5E5", relief=SUNKEN)
-	button2_window = canvas.create_window(125, 10, anchor=NW, window=button2)
+	canvas.create_window(125, 10, anchor=NW, window=button2)
 	
 	# Bind button events
 	canvas.bind( "<Button-1>", startRect)
@@ -231,7 +231,7 @@ for root, dirs, files in os.walk(rootPath):
 	# Find jpg or png pictures
 	for file in files:
 		filePath = os.path.join(root, file)
-		if (filePath[-3:] == "jpg" or filePath[-3:] == "pig"):
+		if (filePath[-3:] == "jpg" or filePath[-3:] == "png"):
 			# Push the image in to the array and wait for tag faces
 			allImagePath.append(filePath)
 			# Push the output file path to the array and wait for output
@@ -247,5 +247,5 @@ if (len(allImagePath)):
 	# Disable window-resizing
 	tk.resizable(0, 0)
 	initialCanvas(allImagePath.pop(0))
-else
+else:
     print("Image not found!")
