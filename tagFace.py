@@ -39,7 +39,7 @@ User guide:
 
 	If seeing error-log 'Recursion error: maximum recursion depth exceeded in comparison' during execution, means there're too many pictures in the stack. Just reopen the tool and everything will work fine!
 """
-# import
+
 import os
 import sys
 # Library for canvas window
